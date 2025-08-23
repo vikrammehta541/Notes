@@ -6,6 +6,12 @@ Using the Session Manager (part of the system manager service), authorized emplo
 
 Interface endpoint per availability zone and need to pick a subnet in each AZ and add an interface endpoint to that subnet.
 
+AWS availability zone ID > same id across accounts> corss accounts integration.
+
+
+
+
+
 
 
 
