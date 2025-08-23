@@ -22,12 +22,18 @@ Unlimited mode in burstable types
 
 SSD instance storage > high random I/O requirement
 HDD for sequecncial I/O
+For random I/O you would ned SSD based storage.
 
 Private IPv4 based comminction inside an availability zone is free. Intra-region pricing applies for any traffic between Availability zones.
 
 For license that are tied to hardware socket and cores, you can use either dedicated hosts or bare metal instances.
 
 System status check would idenity aws infra related issues. Instance status check would also fail if a system status check fails. so either on can be used.
+
+important: you would like to monitor different metrics in an aws service and take automated action based on the metric value. How many couldwatch alarms would you need?
+Alarm is associated with one metric. so, we need one alarm per metric. you can also combine outcome of two alarms using the cloudwatch composite alarm.
+
+
 
 
 
