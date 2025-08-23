@@ -8,6 +8,45 @@ Interface endpoint per availability zone and need to pick a subnet in each AZ an
 
 AWS availability zone ID > same id across accounts> corss accounts integration.
 
+Transit Gateway > link VPCs > TGW routetable to route >
+
+Site to Site VPN > traffic routed over the internet on an encrpted tunner > Client VPN provice remote connectivity to AWS from any locations > for low traffic and cost
+
+Direct connect > consistent network performance at high throughput
+
+Two different direct connect locations between on prem and aws connectivity > high availability
+
+AMI > foreign code > due diligence > thirdparty > price set by seller
+
+Unlimited mode in burstable types
+
+SSD instance storage > high random I/O requirement
+HDD for sequecncial I/O
+
+Private IPv4 based comminction inside an availability zone is free. Intra-region pricing applies for any traffic between Availability zones.
+
+For license that are tied to hardware socket and cores, you can use either dedicated hosts or bare metal instances.
+
+System status check would idenity aws infra related issues. Instance status check would also fail if a system status check fails. so either on can be used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
