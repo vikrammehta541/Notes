@@ -1,0 +1,3 @@
+
+IPv6 uses Egress only Internet Gateway for outbound requests form a private subnet. For IPv4 outbound internet traffic from a private subnet, you can use a NAT instance or NAT Gateway.
+
