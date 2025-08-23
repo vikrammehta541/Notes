@@ -1,3 +1,13 @@
-
 IPv6 uses Egress only Internet Gateway for outbound requests form a private subnet. For IPv4 outbound internet traffic from a private subnet, you can use a NAT instance or NAT Gateway.
+
+NAT gateway is deployed inside a subnet and it can scale only inside that subnet. For fault tolerance, it is recommended that you deploy one NAT gateway per availability zone.
+
+Using the Session Manager (part of the system manager service), authorized employees can log in to their EC2 instances using IAM credentials. Session manager does not use SSH or RDP ports.
+
+Interface endpoint per availability zone and need to pick a subnet in each AZ and add an interface endpoint to that subnet.
+
+
+
+
+
 
