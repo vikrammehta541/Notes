@@ -33,6 +33,70 @@ System status check would idenity aws infra related issues. Instance status chec
 important: you would like to monitor different metrics in an aws service and take automated action based on the metric value. How many couldwatch alarms would you need?
 Alarm is associated with one metric. so, we need one alarm per metric. you can also combine outcome of two alarms using the cloudwatch composite alarm.
 
+Recovery Time Objective captures time it takes to restore business processes after a disaster.
+CloudFront is global. IAM resources are global. S3 is sometimes called a global service; however, the buckets and data are stored in a specific region you select. Remember, for data residency compliance, the customer’s data needs to be stored only in the region that customer selects. The only reason why S3 is called global is bucket name needs to be globally unique (i.e., two buckets in AWS cannot have the same name).
+The MessageRetentionPeriod attribute in SQS allows you to set the message retention period, which is the length of time (in seconds) that Amazon SQS retains a message. You can set this value from 60 seconds (1 minute) to 1,209,600 seconds (14 days). Messages that exceed the retention period are automatically deleted by SQS.
+
+With CloudWatch, you can create two types of alarms: metric and composite. 
+A metric alarm watches a single metric, and when the metric breaches the threshold, the alarm changes to an "ALARM" state. 
+A composite alarm is a new capability that considers the state of multiple alarms. 
+The outcome of a composite alarm depends on the rule expression you define. For example, let's say you have a metric alarm to monitor CPU utilization and another to monitor SQS Queue Length. You can create a composite alarm when you need to perform a certain action only when both CPU and SQS Queue Length alarms are in the ALARM state. Rule expression allows you to combine these underlying metric alarms or other composite alarms and create a new Alarm based on the state of these existing alarms. AWS recommends composite alarms to reduce alarm noise. 
+With CloudWatch Synthetics, you can create the Canaries, a configurable script that runs on a schedule to monitor your endpoint and APIs. Using the Canaries, you can continuously monitor the health of your application even when you don't have any customer traffic. Canaries are written using Node.js or Python and also give you programmatic access to a headless chrome browser (headless refers to a lack of GUI or user interface. You can use this capability for automated tests).
+With CloudWatch Logs, we can gather log files to a central location, analyze and publish metrics based on log content, and store the logs for the desired retention period.
+
+Kinesis Data Streams can preserve the order of messages (arranged as a time order series of records) and make it available for multiple applications. If it helps, you can visualize Kinesis Data Streams as an in-memory database that maintains records as a time-ordered sequence. Multiple applications can read these records at the same time. 
+SQS Standard Queue does not preserve the message arrival order. 
+SQS FIFO maintains the arrival order; however, a message in SQS is delivered only to one consumer. (i.e., multiple consumers cannot read the same message). In addition, the maximum processing time of a message in SQS is 12 hours.
+When the queue is empty, consumers will keep polling the queue, and this would result in lots of empty responses and an increase in usage charges.
+The receive-message call supports a wait-time parameter. When wait-time is 0, it is called Short polling, and the call will return immediately (either with a message or an empty response).
+When wait time is greater than zero, it is called Long polling. Here, the call waits until a new message is available or when the wait time expires. The maximum wait time is 20 seconds.
+The use of long polling can reduce the number of calls, minimize empty responses, and eliminate false-empty responses.
+
+
+Snowball appliances provides a convenient mechanism to transfer petabyte scale data in and out of AWS.  Snowball is a tamper resistant, secure appliance with 256 bit encryption and data is physically shipped to and from AWS. With a 250 Mbps link, it will take 40 days to transfer 100 TB data. Whereas, snowball turn around time is less than 1 week. Refer to Data Transfer and Migration Scenarios videos. 
+AWS Transfer Family is a managed file transfer service, and you can transfer data using existing SFTP, FTP, FTPS, and AS2 clients into and out of AWS Storage Services like S3 and EFS. 
+Datasync is optimized for moving large amounts of data using a Datasync agent. 
+AWS Data Exchange is a comprehensive collection of third-party datasets that customers can subscribe to and use. 
+Snowball Edge Compute Optimized is a secure, rugged device that brings AWS computing and storage capabilities, such as Amazon EC2, Amazon EBS, Amazon S3, AWS IoT Greengrass, AWS Lambda functions, and AWS IAM to your edge environments for machine learning, data analytics, processing, and local storage.
+
+You need to enable automatic rotation of KMS – Customer Managed Keys. Once the rotation is enabled, AWS automatically rotates the key every year.
+Configure a retention period of three years in Compliance Mode for each object. This will ensure current object versions are protected from modification and deletion. 
+Governance mode is not the right choice as administrators, and other users with S3:* permission on the bucket would be able to remove the object version.
+ A legal hold may be possible; however, people with s3:PutObjectLegalHold permission can disable the legal hold and then delete the object. 
+The Deny All permission may be too restrictive as it will prevent even reads.
+Web Application Firewall allows you to enforce country-specific rules. You can block or allow traffic from specific countries. 
+Route 53 Geolocation and Geoproximity routing only handles DNS queries. It does not protect your application from requests coming from other countries. 
+Network ACL is useful for blocking traffic based on IP address and CIDR Blocks. This approach requires you to maintain the IP Address list by country and can be a lot of work. 
+Shield Advanced protects a resource against Layer 3 and 4 attacks and is not the correct solution for this question.
+Network Load Balancer has introduced support for security groups as of August 2023. This enhancement allows you to restrict access based on CIDR blocks.
+In addition, when Client IP Preservation is enabled, you can also apply restriction at the EC2 instances based on the requester's IP address, leveraging the EC2 instance security group.
+You can add a rule to the security groups associated with your EC2 instances that references the security group associated with your Network Load Balancer. This allows clients to send traffic to your targets through your load balancer, but prevents them from sending traffic directly to your targets
+These security group controls are applicable across all three load balancer types—Classic, Application, and Network Load Balancers. Additionally, you can enforce these controls in the Network ACL associated with the load balancer subnets.
+Web Application Firewall allows for access limitation by IP address. However, it's important to highlight that WAF integration is exclusive to Application Load Balancer, CloudFront distribution, and API Gateway.
+For comprehensive security measures, Shield Advanced delivers automatic protection against layer 3 and layer 4 DDoS-type attacks.
+The Network Firewall is an Intrusion prevention system (IPS) that actively monitors and blocks suspicious traffic to and from all your VPCs. This is a Stateful Firewall. Using Firewall Manager, you can centrally manage and apply mandatory Network Firewall security policies across newly created accounts and VPCs. 
+VPC Traffic Mirroring duplicates the traffic for offline inspection. So, it is not an intrusion prevention system. NACL and Security Group needs to be configured properly; however, they are based on rigid rules on what to allow and block. Since the requirement calls for blocking suspicious traffic, we need an intelligent system that looks for attack patterns and blocks the traffic.
+AWS Managed Keys are automatically rotated every year.
+Public IP Address is optional and when requested, AWS assigns one from its pool of IP addresses. When an instance is stopped, public IP address is released. Instance gets a new public IP address when it is restarted. 
+Elastic IP addresses can be used for assigning static public IP address to the instances; however, AWS limits each account to 5 Elastic IPs per region and you need to justify to AWS if you need additional IP Addresses. 
+Bastion Host with a single well-known access point is the recommended option and you can let your customers access the EC2 instances using private DNS name or private IP Addresses. Bastion Host also improves security posture as it reduces attack surface by keeping your EC2 instances in private subnet. You can tighten instances’ security group to allow access only from Bastion Host security group. Private DNS Name and Private IP Address remains attached to the instance until the instance is terminated.
+Use AWS Certificate Manager to provision, manage, and deploy SSL certificates. ACM-issued certificates are automatically renewed and bound with ACM integrated services like ELB, CloudFront, API Gateway, etc. 
+KMS is used for application data encryption and at-rest encryption. 
+Secrets Manager is more commonly used for storing passwords, access key credentials, and Keys needed to access third-party APIs
+GuardDuty is an intrusion detection system that can detect suspicious activities. We need additional workflow and steps to review and block activities flagged by GuardDuty. 
+AWS Inspector identifies software vulnerabilities in your EC2 instances and container images. Inspector does not block attacks. 
+WAF can block malicious layer 7 attacks (Application Layer attacks). WAF currently integrates with CloudFront distribution, Application Load Balancer, and API Gateway. 
+WAF does not directly integrate with Network Load Balancer. So, a common strategy is to use CloudFront in front of NLB and protect CloudFront with WAF. 
+Shield Advanced protects individual resources against Layer 3 and 4 attacks (like DDoS) and currently supports EC2 instances, Elastic IPs, Elastic Load Balancers, CloudFront, Route 53 hosted zones, and Global accelerators. 
+Shield Advanced customers also get access to AWS DDoS Response Team.
+VPC Flow Log is used for monitoring traffic at VPC, Subnet or at individual interface level. You can use this for troubleshooting network issues and for monitoring traffic in and out of your VPC. 
+Cloud Watch Log is a generic capability for log aggregation, filtering and monitoring. You can use this to publish your own logs. 
+Cloud Trail Log is used for monitoring AWS resources and changes made to the resources through API, SDKs, Command Line tools. 
+Access Log is used for monitoring requests that are made to S3 bucket.
+
+
+
+
 
 
 
