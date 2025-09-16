@@ -157,3 +157,87 @@ Built-in retry, durability, and at-least-once delivery.
 
 “Many consumers? Fan it out — SNS to SQS is what it's about.”
 
+B. Configure an Amazon Simple Queue Service (Amazon SQS) queue as a destination for the jobs. Implement the compute nodes with Amazon EC2 instances that are managed in an Auto Scaling group. Configure EC2 Auto Scaling based on the size of the queue.
+
+🔹 Topic: Resilient Job Processing
+📌 Tags: SQS, Decoupling, Scalability, Auto Scaling, Event-Driven, Resilient Architecture
+
+📝 Notes:
+
+This architecture decouples job production from job processing using SQS.
+
+Compute nodes in an Auto Scaling group can scale dynamically based on queue depth, ensuring scalability for variable workloads.
+
+SQS is fault-tolerant and durable, which increases resiliency.
+
+Auto Scaling based on queue size ensures the compute fleet matches demand in near real time.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Queue the jobs, scale the nodes — SQS + Auto Scaling handles the loads.”
+
+B. Create an Amazon S3 File Gateway to extend the company's storage space. Create an S3 Lifecycle policy to transition the data to S3 Glacier Deep Archive after 7 days.
+
+🔹 Topic: Hybrid File Storage with Lifecycle Management
+📌 Tags: SMB, S3 File Gateway, Lifecycle, Low-Latency, Archive, Hybrid Storage, Cost Optimization
+
+📝 Notes:
+
+Amazon S3 File Gateway provides an SMB-compatible file interface that integrates with the existing on-premises file server.
+
+Recently accessed files are cached locally for low-latency access.
+
+Older files are automatically offloaded to S3, extending storage capacity.
+
+An S3 Lifecycle policy can move infrequently accessed files to S3 Glacier Deep Archive, optimizing cost.
+
+Provides automatic lifecycle management, no user disruption, and virtually unlimited backend storage.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Hot files local, cold files to the cloud — File Gateway with Lifecycle makes IT proud.”
+
+B. Use an API Gateway integration to send a message to an Amazon Simple Queue Service (Amazon SQS) FIFO queue when the application receives an order. Configure the SQS FIFO queue to invoke an AWS Lambda function for processing.
+
+🔹 Topic: Ordered Message Processing
+📌 Tags: SQS FIFO, Order Preservation, API Gateway, Lambda, Asynchronous, Event-Driven
+
+📝 Notes:
+
+SQS FIFO (First-In-First-Out) queues are specifically designed to preserve the exact order of message delivery.
+
+Using API Gateway → SQS FIFO → Lambda ensures that orders are processed in the order they are received.
+
+API Gateway receives the HTTP request, sends it to the FIFO queue.
+
+FIFO queues support deduplication, grouping, and ordered processing, which are essential for order-sensitive workflows.
+
+Lambda can poll and process messages sequentially based on message group ID.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Orders in order? Go FIFO — First In, First Out, First-Class flow.”
+
+A. Use AWS Secrets Manager. Turn on automatic rotation.
+
+🔹 Topic: Database Credential Management
+📌 Tags: Secrets Manager, Auto Rotation, Aurora, Secure Storage, Low Ops
+
+📝 Notes:
+
+AWS Secrets Manager securely stores database credentials and provides automatic rotation without application downtime.
+
+Applications can retrieve credentials using the Secrets Manager API/SDK instead of relying on locally stored files.
+
+Tightly integrates with Aurora, making it ideal for minimizing operational overhead.
+
+Provides auditing, encryption (via KMS), and versioning for secret management.
+
+Removes the need for manual updates when credentials change.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“For secrets that rotate, let Secrets Manager automate.”
+
+
+
