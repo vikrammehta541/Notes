@@ -14,3 +14,146 @@ No infrastructure to manage, very low operational complexity.
 
 🎯 Best Fit: Fast, global uploads to a single S3 bucket, with minimal setup and max speed.
 
+Easy Memory Trick (Mnemonic):
+
+“For Fast Global Uploads, Accelerate S3!”
+(S3 Transfer Acceleration is your go-to for global ingestion over the internet)
+
+C. Use Amazon Athena directly with Amazon S3
+
+📌 Tags: Serverless, SQL on S3, Low Ops, JSON, On-Demand
+
+📝 Notes:
+
+Athena lets you run SQL queries directly on data stored in S3 — including JSON files.
+
+Serverless – no infrastructure to manage.
+
+Perfect for ad-hoc, on-demand querying.
+
+Minimal setup: just define a table schema over your S3 data (you can use AWS Glue for cataloging optionally).
+
+🎯 Best Fit: You already have data in S3, and you need simple queries with minimal changes or overhead.
+
+💡 Easy Memory Trick (Mnemonic):
+
+"Athena = Ad-hoc Analytics on S3."
+
+A. Add the aws:PrincipalOrgID global condition key to the S3 bucket policy
+
+📌 Tags: S3 Access Control, Organizations, Low Ops, Secure, Global Restriction
+
+📝 Notes:
+
+aws:PrincipalOrgID is a global condition key that restricts access only to principals (users, roles) in accounts under a specific AWS Organization ID.
+
+This approach automatically includes all accounts in the organization, including newly added ones.
+
+No need to manage individual users, tags, or policies per account.
+
+Very low operational overhead — one policy in S3.
+
+🎯 Best for: Organization-wide access control to a shared S3 bucket.
+
+Easy Memory Trick (Mnemonic):
+
+"Org access? Use OrgID."
+(Use PrincipalOrgID to give access to all accounts in the org—simple and scalable.)
+
+A. Create a gateway VPC endpoint to the S3 bucket
+
+🔹 Topic: Private S3 Access
+📌 Tags: Private Access, VPC Endpoint, No Internet, S3, Secure, Low Cost
+
+📝 Notes:
+
+A Gateway VPC Endpoint allows private connectivity between EC2 in a VPC and Amazon S3 over the AWS network.
+
+Eliminates need for Internet Gateway or NAT Gateway.
+
+Ensures secure, high-speed, and zero-cost S3 access within AWS.
+
+Ideal when the EC2 instance is in a private subnet and must access S3 securely and privately.
+
+A. Create a gateway VPC endpoint to the S3 bucket
+
+🔹 Topic: Private S3 Access
+📌 Tags: Private Access, VPC Endpoint, No Internet, S3, Secure, Low Cost
+
+📝 Notes:
+
+A Gateway VPC Endpoint enables private network connectivity from your EC2 instance to Amazon S3 without requiring internet access.
+
+No need for Internet Gateway, NAT Gateway, or public IPs.
+
+Traffic stays on the AWS internal network, improving security and performance.
+
+Zero data transfer cost to S3, and no infrastructure to manage.
+
+The most efficient and secure way to allow EC2 in a VPC to access S3 privately.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Private S3? Use the Gateway VPC Endpoint — no internet needed.”
+
+C. Copy the data from both EBS volumes to Amazon EFS. Modify the application to save new documents to Amazon EFS
+
+🔹 Topic: Shared Storage for Scalability
+📌 Tags: Scalability, High Availability, EFS, Shared Storage, Multi-AZ Access
+
+📝 Notes:
+
+EBS volumes are attached to a single EC2 instance only, and cannot be shared across instances or Availability Zones.
+
+Amazon EFS (Elastic File System) is a shared file system accessible from multiple EC2 instances across AZs.
+
+Migrating user-uploaded files to EFS ensures all EC2 instances see the same files, resolving the inconsistency users experienced.
+
+Serverless, scalable, and durable — perfect for web applications needing shared storage.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Multi-AZ files? Share with EFS — not EBS.”
+
+B. Create an AWS Snowball Edge job. Receive a Snowball Edge device on premises. Use the Snowball Edge client to transfer data to the device. Return the device so that AWS can import the data into Amazon S3.
+
+🔹 Topic: Bulk Data Migration
+📌 Tags: Snowball Edge, Large Data Transfer, Low Bandwidth, Offline Migration, S3 Import
+
+📝 Notes:
+
+The total data size is 70 TB, and minimizing network bandwidth usage is critical.
+
+AWS Snowball Edge is designed for petabyte-scale offline data transfer to AWS.
+
+No dependency on your existing internet bandwidth — data is physically shipped.
+
+After loading the data, AWS automatically imports it into S3 when the device is returned.
+
+Fastest and most bandwidth-efficient solution for this use case.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Big data, small pipe? Send a Snowball, skip the hype.”
+
+D. Publish the messages to an Amazon Simple Notification Service (Amazon SNS) topic with multiple Amazon Simple Queue Service (Amazon SQS) subscriptions. Configure the consumer applications to process the messages from the queues.
+
+🔹 Topic: Scalable Message Fan-Out
+📌 Tags: Scalable, Event-Driven, SNS, SQS, Fan-Out, Decoupling, Burst Handling
+
+📝 Notes:
+
+This uses the SNS + SQS fan-out pattern, ideal for decoupling producers from multiple consumers.
+
+SNS publishes messages to multiple SQS queues, each one read independently by a consumer or microservice.
+
+Highly scalable, can handle sudden traffic spikes (like 100,000 msgs/sec).
+
+Consumers are asynchronous, independent, and can scale separately.
+
+Built-in retry, durability, and at-least-once delivery.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Many consumers? Fan it out — SNS to SQS is what it's about.”
+
