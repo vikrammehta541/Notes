@@ -1,0 +1,16 @@
+A. Turn on S3 Transfer Acceleration + Multipart Uploads
+
+📌 Tags: Global Upload, High-Speed, Low Ops, Fastest Path, S3TA
+
+📝 Notes:
+
+S3 Transfer Acceleration (S3TA) uses Amazon CloudFront’s globally distributed edge locations to accelerate data uploads over long distances.
+
+Multipart upload speeds up large file transfers and improves resiliency.
+
+Ideal for direct uploads from remote global sites with good internet.
+
+No infrastructure to manage, very low operational complexity.
+
+🎯 Best Fit: Fast, global uploads to a single S3 bucket, with minimal setup and max speed.
+
