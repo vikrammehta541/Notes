@@ -239,5 +239,123 @@ Removes the need for manual updates when credentials change.
 
 “For secrets that rotate, let Secrets Manager automate.”
 
+A. Create an Amazon CloudFront distribution that has the S3 bucket and the ALB as origins. Configure Route 53 to route traffic to the CloudFront distribution.
+
+🔹 Topic: Global Performance Optimization
+📌 Tags: CloudFront, S3, ALB, CDN, Low Latency, Static + Dynamic Content
+
+📝 Notes:
+
+CloudFront is a Content Delivery Network (CDN) that caches static data from S3 close to users globally, reducing latency.
+
+CloudFront can also have multiple origins (both S3 for static content and ALB for dynamic content).
+
+This provides low-latency delivery of static assets and accelerates dynamic content via optimized network paths.
+
+Route 53 will point the custom domain to the CloudFront distribution, ensuring a single, seamless entry point.
+
+Most efficient and least complex solution compared to Global Accelerator, which isn’t necessary here.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Static in S3, dynamic behind ALB — CloudFront brings them close to me.”
+
+A. Store the credentials as secrets in AWS Secrets Manager. Use multi-Region secret replication for the required Regions. Configure Secrets Manager to rotate the secrets on a schedule.
+
+🔹 Topic: Multi-Region Secret Rotation
+📌 Tags: Secrets Manager, Auto Rotation, Multi-Region, Low Ops, RDS MySQL
+
+📝 Notes:
+
+AWS Secrets Manager provides built-in automatic rotation for RDS MySQL with prebuilt Lambda templates.
+
+Supports multi-Region secret replication, keeping credentials synchronized across Regions with minimal admin effort.
+
+Integrates natively with RDS and IAM/KMS, delivering secure storage, auditing, and versioning.
+
+Requires no custom rotation code or external storage — lowest operational overhead.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Rotate across Regions with less toil? Use Secrets Manager on auto-royal.”
+
+C. Use Amazon Aurora with a Multi-AZ deployment. Configure Aurora Auto Scaling with Aurora Replicas.
+
+🔹 Topic: Auto-Scaling Read DB
+📌 Tags: Aurora, Multi-AZ, Read Scaling, Aurora Replicas, High Availability, Auto Scaling
+
+📝 Notes:
+
+Aurora supports read replicas that can auto scale with Aurora Auto Scaling to handle unpredictable read-heavy workloads.
+
+Multi-AZ provides built-in high availability and fast failover.
+
+Read traffic can be directed to Aurora Replicas via the reader endpoint, offloading the primary writer.
+
+Fully managed with automatic storage scaling and performance optimizations over standard MySQL on EC2.
+
+Minimal app changes: update DB endpoints (writer/reader) and use connection pooling as needed.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“More reads, no pain? Aurora reps auto-train.”
+
+C. Use AWS Network Firewall to create the required rules for traffic inspection and traffic filtering for the production VPC.
+
+🔹 Topic: VPC Traffic Inspection
+📌 Tags: AWS Network Firewall, Inline Filtering, Stateful Inspection, Egress/Ingress Control, VPC Security
+
+📝 Notes:
+
+AWS Network Firewall provides inline, stateful L3–L7 inspection and policy-based filtering for ingress, egress, and East/West VPC traffic.
+
+Supports domain/IP/port rules, stateful rules (Suricata), and IDS/IPS-style controls; integrates with Gateway Load Balancer architectures if needed.
+
+Centralized management per VPC/subnet with high availability and auto scaling throughput — mirrors on-prem “inspection server” behavior in-cloud.
+
+Alternatives don’t fit: GuardDuty = detection (no blocking), Traffic Mirroring = observe only (no enforce), Firewall Manager = policy orchestration (uses Network Firewall/WAF underneath).
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Need inline VPC filtering? Network Firewall is the gate.”
+
+B. Create an analysis in Amazon QuickSight. Connect all the data sources and create new datasets. Publish dashboards to visualize the data. Share the dashboards with the appropriate users and groups.
+
+🔹 Topic: Data Visualization
+📌 Tags: QuickSight, S3, RDS PostgreSQL, Dashboards, Row-Level Security, Access Control
+
+📝 Notes:
+
+Amazon QuickSight natively connects to S3 (via Athena/manifest) and RDS for PostgreSQL, letting you build unified datasets and dashboards.
+
+You can publish dashboards and share with QuickSight users/groups (not IAM roles) to grant management full access and limit others.
+
+Use Row-Level Security (RLS) and dashboard-level sharing to enforce who sees what.
+
+No extra ETL or report hosting needed—lowest operational overhead for interactive visualizations.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“Many sources to visualize? Use QuickSight and share with groups (not roles).”
+
+A. Create an IAM role that grants access to the S3 bucket. Attach the role to the EC2 instances.
+
+🔹 Topic: EC2 → S3 Access
+📌 Tags: IAM Role, Instance Profile, Least Privilege, No Static Keys, S3 Access
+
+📝 Notes:
+
+Use an IAM role (via instance profile) so EC2 gets temporary credentials from the Instance Metadata Service (IMDS).
+
+Apply least-privilege permissions (e.g., bucket-specific s3:GetObject, s3:PutObject).
+
+No hard-coded keys on instances; automatic rotation reduces operational risk.
+
+Policies/groups/users can’t be attached to instances; roles are the correct mechanism.
+
+💡 Easy Memory Trick (Mnemonic):
+
+“EC2 to S3? Use a role on the key.”
+
 
 
